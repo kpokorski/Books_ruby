@@ -57,6 +57,7 @@ class AuthorsController < ApplicationController
     end
   end
 
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_author
@@ -65,6 +66,6 @@ class AuthorsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def author_params
-      params.require(:author).permit(:first_name, :last_name)
+      params.require(:author).permit(:first_name, :last_name, :email, :phone_number)
     end
 end
