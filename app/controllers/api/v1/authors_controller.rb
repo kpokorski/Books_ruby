@@ -5,11 +5,14 @@ module Api
 
     # GET /authors or /authors.json
     def index
-      @authors = Author.all
+      authors = Author.all
+      render json: {status: "SUCCESS", message: "Loaded authors", data: authors }, status: :ok
     end
 
     # GET /authors/1 or /authors/1.json
     def show
+      authors = Author.find(params[:id])
+      render json: {status: "SUCCESS", message: "Loaded author", data: authors }, status: :ok
     end
 
     # GET /authors/new
@@ -23,38 +26,31 @@ module Api
 
     # POST /authors or /authors.json
     def create
-      @author = Author.new(author_params)
-
-      respond_to do |format|
-        if @author.save
-          format.json { render :show, status: :created, location: @author }
+      author = Author.new(author_params)
+        if author.save
+          render json: { status: "SUCCESS", message: "Author saved", data: author }
         else
-          format.json { render json: @author.errors, status: :unprocessable_entity }
+          render json: { status: "ERROR", message: "Author not saved", data: author.errors }
         end
       end
-    end
+
 
     # PATCH/PUT /authors/1 or /authors/1.json
     def update
-      respond_to do |format|
-        if @author.update(author_params)
-          format.json { render :show, status: :ok, location: @author }
-        else
-          format.json { render json: @author.errors, status: :unprocessable_entity }
-        end
+      author = Author.find(params[:id])
+      if author.update(author_params)
+        render json: { status: "SUCCESS", message: "Author saved", data: author }
+      else
+        render json: { status: "ERROR", message: "Author not saved", data: author.errors }
       end
     end
 
     # DELETE /authors/1 or /authors/1.json
     def destroy
-      @author.destroy
-
-      respond_to do |format|
-        format.json { head :no_content }
-      end
+      author = Author.find(params[:id])
+      author.destroy
+      render json: { status: "SUCCESS", message: "Deleted author", data: author }
     end
-
-
 
 
     private
@@ -66,6 +62,7 @@ module Api
       # Only allow a list of trusted parameters through.
       def author_params
         params.require(:author).permit(:first_name, :last_name, :email, :phone_number)
+
       end
     end
   end
