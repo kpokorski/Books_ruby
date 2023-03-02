@@ -86,6 +86,8 @@ GEM
     date (3.3.3)
     debug (1.7.1)
     erubi (1.12.0)
+    fast_jsonapi (1.5)
+      activesupport (>= 4.2)
     ffaker (2.21.0)
     globalid (1.1.0)
       activesupport (>= 5.0)
@@ -206,6 +208,7 @@ DEPENDENCIES
   bootsnap
   capybara
   debug
+  fast_jsonapi
   ffaker (~> 2.21.0)
   importmap-rails
   jbuilder

@@ -7,49 +7,38 @@ module Api
     # GET /books or /books.json
     def index
       books = Book.all
-      render json: {status: "SUCCESS", message: "Loaded books", data: books }, status: :ok
+      json_string = BookSerializer.new(books)
+      render json: {status: :ok, message: "Loaded books", data: json_string}
     end
 
     # GET /books/1 or /books/1.json
     def show
-      books = Book.find(params[:id])
-      render json: {status: "SUCCESS", message: "Loaded book", data: books }, status: :ok
-    end
-
-    # GET /books/new
-    def new
-      @book = Book.new
-    end
-
-    # GET /books/1/edit
-    def edit
+      render json: {status: :ok, message: "Books", data: @json_string}
     end
 
     # POST /books or /books.json
     def create
-      book = Book.new(author_params)
+      book = Book.new(book_params)
       if book.save
-        render json: { status: "SUCCESS", message: "Book saved", data: book }
+        render json: {status: :ok, message: "Loaded books", data: book}
       else
-        render json: { status: "ERROR", message: "Book not saved", data: book.errors }
+        render json: { status: "ERROR", message: "Book not loaded", data: book.errors }
       end
     end
 
     # PATCH/PUT /books/1 or /books/1.json
     def update
-      book = Book.find(params[:id])
-        if book.update(book_params)
-          render json: { status: "SUCCESS", message: "Book saved", data: book }
+        if @book.update(book_params)
+          render json: {status: :ok, message: "Book updated", data: @json_string}
         else
-          render json: { status: "ERROR", message: "Book not saved", data: book.errors }
+          render json: { status: "ERROR", message: "Book not updated", data: @book.errors }
         end
       end
 
     # DELETE /books/1 or /books/1.json
     def destroy
-      book = Book.find(params[:id])
-      book.destroy
-      render json: { status: "SUCCESS", message: "Deleted author", data: book }
+      @book.destroy
+      render json: {status: :ok, message: "Destroyed books", data: @json_string}
     end
 
 
@@ -57,6 +46,7 @@ module Api
       # Use callbacks to share common setup or constraints between actions.
       def set_book
         @book = Book.find(params[:id])
+        @json_string = BookSerializer.new(@book)
       end
 
       # Only allow a list of trusted parameters through.
