@@ -6,7 +6,7 @@ module Api
 
     # GET /books or /books.json
     def index
-      books = Book.all
+      books = Book.includes(:author).all
       json_string = BookSerializer.new(books)
       render json: {status: :ok, message: "Loaded books", data: json_string}
     end
