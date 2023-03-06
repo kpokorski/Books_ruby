@@ -7,21 +7,21 @@ module Api
     def index
       authors = Author.all
       json_string = AuthorSerializer.new(authors)
-      render json: {status: :ok, message: "Loaded authors", data: json_string }
+      render json: json_string
     end
 
     # GET /authors/1 or /authors/1.json
     def show
-      render json: {status: :ok, message: "Author", data: @json_string }
+      render json: @json_string
     end
 
     # POST /authors or /authors.json
     def create
       author = Author.new(author_params)
         if author.save
-          render json: { status: :ok, message: "Author saved", data: author }
+          render json:  author
         else
-          render json: { status: "ERROR", message: "Author not saved", data: author.errors }
+          render json:  author.errors
         end
       end
 
@@ -29,16 +29,18 @@ module Api
     # PATCH/PUT /authors/1 or /authors/1.json
     def update
       if @author.update(author_params)
-        render json: { status: :ok, message: "Author updated", data: @json_string }
+        render json: @json_string
       else
-        render json: { status: "ERROR", message: "Author not updated", data: @author.errors }
+        render json: @author.errors
       end
     end
 
     # DELETE /authors/1 or /authors/1.json
     def destroy
       @author.destroy
-      render json: { status: :ok, message: "Deleted author", data: @json_string }
+      json_string = AuthorSerializer.new(@author)
+      #render json: { status: :ok, message: "Deleted author", data: @json_string }
+      render json: json_string
     end
 
 
